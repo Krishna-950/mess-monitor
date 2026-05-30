@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mess Entrance Monitor</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+
+  header {
+    background: linear-gradient(135deg, #1e3a5f, #0f172a);
+    padding: 20px 30px;
+    display: flex; align-items: center; gap: 14px;
+    border-bottom: 1px solid #334155;
+  }
+  header h1 { font-size: 1.5rem; color: #38bdf8; }
+  header span { font-size: 0.85rem; color: #94a3b8; }
+
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 30px;
+    max-width: 1100px;
+    margin: auto;
+  }
+
+  .card {
+    background: #1e293b;
+    border-radius: 14px;
+    padding: 24px;
+    border: 1px solid #334155;
+  }
+  .card h2 {
+    font-size: 1rem;
+    color: #38bdf8;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  #status-box {
+    background: #0f172a;
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid #334155;
+    margin-bottom: 14px;
+  }
+  #status-box .status-icon { font-size: 2.5rem; }
+  #status-box .status-name { font-size: 1.4rem; font-weight: 700; margin-top: 8px; }
+  #status-box .status-reg  { font-size: 0.9rem; color: #94a3b8; }
+  #status-box .status-msg  { font-size: 0.85rem; margin-top: 6px; }
+
+  .match   { color: #4ade80; }
+  .denied  { color: #f97316; }
+  .unknown { color: #f87171; }
+
+  label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 14px;
+  }
+  input, select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: #38bdf8;
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 11px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    width: 100%;
+    transition: opacity 0.2s;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn-blue  { background: #0284c7; color: #fff; }
+  .btn-green { background: #16a34a; color: #fff; }
+
+  #reg-status {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    text-align: center;
+    min-height: 20px;
+  }
+
+  .full-width { grid-column: 1 / -1; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    color: #94a3b8;
+    border-bottom: 1px solid #334155;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #1e293b;
+  }
+  tr:hover td { background: #0f172a; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .badge-staff   { background: #1e40af; color: #bfdbfe; }
+  .badge-hostel  { background: #065f46; color: #a7f3d0; }
+  .badge-scholar { background: #7c2d12; color: #fed7aa; }
+
+  #pending-indicator {
+    display: none;
+    background: #854d0e;
+    color: #fef08a;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  #pending-indicator.show { display: block; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🏫 Mess Entrance Monitor</h1>
+    <span>Hostel Face Recognition System</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Recognition Status Card -->
+  <div class="card">
+    <h2>🔍 Recognition Status</h2>
+    <div id="status-box">
+      <div class="status-icon">⏳</div>
+      <div class="status-name" style="color:#94a3b8">Waiting...</div>
+      <div class="status-msg" style="color:#64748b">Press the Recognition button on the device</div>
+    </div>
+    <button class="btn btn-blue" onclick="checkStatus()">🔄 Refresh Status</button>
+  </div>
+
+  <!-- Registration Card -->
+  <div class="card">
+    <h2>📋 Register Member</h2>
+    <div id="pending-indicator">📸 Image captured! Fill details and submit.</div>
+
+    <label>Full Name</label>
+    <input type="text" id="reg-name" placeholder="e.g. Ravi Kumar">
+
+    <label>Registration Number</label>
+    <input type="text" id="reg-number" placeholder="e.g. HS2024001">
+
+    <label>Category</label>
+    <select id="reg-category">
+      <option value="staff">Mess Staff (Unlimited)</option>
+      <option value="hostel">Hostel Member (3× per day)</option>
+      <option value="day_scholar">Day Scholar (1× per day)</option>
+    </select>
+
+    <button class="btn btn-green" onclick="submitRegistration()">✅ Register Member</button>
+    <div id="reg-status"></div>
+  </div>
+
+  <!-- Members Table -->
+  <div class="card full-width">
+    <h2>👥 Registered Members</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Reg. Number</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody id="members-tbody">
+        {% for m in members %}
+        <tr>
+          <td>{{ m.name }}</td>
+          <td>{{ m.reg_number }}</td>
+          <td>
+            <span class="badge
+              {% if m.category == 'staff' %}badge-staff
+              {% elif m.category == 'hostel' %}badge-hostel
+              {% else %}badge-scholar{% endif %}">
+              {{ m.category | replace('_', ' ') | title }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  // Auto-check pending image every 3 seconds
+  setInterval(checkPendingImage, 3000);
+  // Auto-refresh recognition status every 5 seconds
+  setInterval(checkStatus, 5000);
+
+  async function checkPendingImage() {
+    try {
+      const r = await fetch('/pending_status');
+      const d = await r.json();
+      document.getElementById('pending-indicator')
+              .classList.toggle('show', d.pending);
+    } catch(e) {}
+  }
+
+  async function submitRegistration() {
+    const name     = document.getElementById('reg-name').value.trim();
+    const reg      = document.getElementById('reg-number').value.trim();
+    const category = document.getElementById('reg-category').value;
+    const statusEl = document.getElementById('reg-status');
+
+    if (!name || !reg) {
+      statusEl.style.color = '#f87171';
+      statusEl.textContent = '⚠️ Please fill in all fields.';
+      return;
+    }
+
+    statusEl.style.color = '#94a3b8';
+    statusEl.textContent = 'Registering...';
+
+    try {
+      const r = await fetch('/register_save', {
+        method:  'POST',
+        headers: {'Content-Type': 'application/json'},
+        body:    JSON.stringify({ name, reg_number: reg, category })
+      });
+      const d = await r.json();
+
+      if (d.status === 'REGISTERED') {
+        statusEl.style.color = '#4ade80';
+        statusEl.textContent = `✅ ${d.name} registered successfully!`;
+        document.getElementById('reg-name').value   = '';
+        document.getElementById('reg-number').value = '';
+        document.getElementById('pending-indicator').classList.remove('show');
+        loadMembers();
+      } else {
+        statusEl.style.color = '#f87171';
+        statusEl.textContent = '❌ ' + (d.error || 'Registration failed');
+      }
+    } catch(e) {
+      statusEl.style.color = '#f87171';
+      statusEl.textContent = '❌ Server error. Try again.';
+    }
+  }
+
+  async function checkStatus() {
+    try {
+      const r = await fetch('/last_recognition');
+      const d = await r.json();
+      const box = document.getElementById('status-box');
+
+      if (d.status === 'MATCH') {
+        box.innerHTML = `
+          <div class="status-icon">✅</div>
+          <div class="status-name match">${d.name}</div>
+          <div class="status-reg">${d.reg} · ${d.category.replace('_',' ')}</div>
+          <div class="status-msg match">Access Granted</div>`;
+      } else if (d.status === 'DENIED') {
+        box.innerHTML = `
+          <div class="status-icon">🚫</div>
+          <div class="status-name denied">${d.name}</div>
+          <div class="status-reg">${d.reg}</div>
+          <div class="status-msg denied">Daily limit reached — Buzzer triggered</div>`;
+      } else if (d.status === 'UNKNOWN') {
+        box.innerHTML = `
+          <div class="status-icon">❓</div>
+          <div class="status-name unknown">Unknown Person</div>
+          <div class="status-msg unknown">Face not recognised — Buzzer triggered</div>`;
+      }
+    } catch(e) {}
+  }
+
+  async function loadMembers() {
+    try {
+      const r = await fetch('/members');
+      const members = await r.json();
+      const tbody = document.getElementById('members-tbody');
+      const badgeMap = {
+        staff:       'badge-staff',
+        hostel:      'badge-hostel',
+        day_scholar: 'badge-scholar'
+      };
+      tbody.innerHTML = members.map(m => `
+        <tr>
+          <td>${m.name}</td>
+          <td>${m.reg_number}</td>
+          <td><span class="badge ${badgeMap[m.category]}">${m.category.replace('_',' ')}</span></td>
+        </tr>`).join('');
+    } catch(e) {}
+  }
+</script>
+</body>
+</html>
