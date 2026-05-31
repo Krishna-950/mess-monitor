@@ -1,17 +1,17 @@
-import os, io, json
+import os, io
 from datetime import date
 from flask import Flask, request, jsonify, render_template
-import face_recognition
 import numpy as np
 from PIL import Image
 from supabase import create_client
 from dotenv import load_dotenv
+import insightface
+from insightface.app import FaceAnalysis
 
 load_dotenv()
 
 app = Flask(__name__)
 
-# ─── Supabase Setup ─────────────────────────────────────────────
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -28,19 +28,19 @@ DAILY_LIMITS = {
 pending_image = None
 last_result   = {}
 
-# ─── Helpers ────────────────────────────────────────────────────
-def load_all_known_faces():
-    encodings, ids = [], []
-    members = supabase.table("members").select("*").execute().data
-    for m in members:
-        img_path = os.path.join(KNOWN_FACES_DIR, f"{m['reg_number']}.jpg")
-        if os.path.exists(img_path):
-            image = face_recognition.load_image_file(img_path)
-            encs  = face_recognition.face_encodings(image)
-            if encs:
-                encodings.append(encs[0])
-                ids.append(m['reg_number'])
-    return encodings, ids
+face_app = FaceAnalysis(providers=['CPUExecutionProvider'])
+face_app.prepare(ctx_id=0, det_size=(640, 640))
+
+def get_embedding(image_bytes):
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    img_array = np.array(image)
+    faces = face_app.get(img_array)
+    if not faces:
+        return None
+    return faces[0].embedding
+
+def cosine_similarity(a, b):
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 def get_today_count(reg_number):
     today  = date.today().isoformat()
@@ -57,10 +57,6 @@ def log_entry(reg_number):
         "reg_number": reg_number,
         "entry_date": today
     }).execute()
-
-def decode_image(raw_bytes):
-    image = Image.open(io.BytesIO(raw_bytes)).convert("RGB")
-    return np.array(image)
 
 # ─── Routes ─────────────────────────────────────────────────────
 @app.route("/")
@@ -80,62 +76,131 @@ def register_save():
     if not pending_image:
         return jsonify({"error": "No pending image. Press register button first."}), 400
 
-    data       = request.get_json()
-    name       = data.get("name")
-    reg_number = data.get("reg_number")
-    category   = data.get("category")
+    data            = request.get_json()
+    name            = data.get("name")
+    reg_number      = data.get("reg_number")
+    category        = data.get("category")
+    last_date_str   = data.get("last_date")  # None for staff
 
     if not all([name, reg_number, category]):
         return jsonify({"error": "Missing fields"}), 400
 
-    img_path = os.path.join(KNOWN_FACES_DIR, f"{reg_number}.jpg")
-    with open(img_path, "wb") as f:
-        f.write(pending_image)
+    if category != "staff" and not last_date_str:
+        return jsonify({"error": "Last date is required for this category"}), 400
 
-    image = face_recognition.load_image_file(img_path)
-    if not face_recognition.face_encodings(image):
-        os.remove(img_path)
+    embedding = get_embedding(pending_image)
+    if embedding is None:
         pending_image = None
         return jsonify({"error": "No face detected in image. Try again."}), 400
 
+    img_path = os.path.join(KNOWN_FACES_DIR, f"{reg_number}.jpg")
+    image = Image.open(io.BytesIO(pending_image)).convert("RGB")
+    image.save(img_path)
+
+    emb_path = os.path.join(KNOWN_FACES_DIR, f"{reg_number}.npy")
+    np.save(emb_path, embedding)
+
     supabase.table("members").upsert({
-        "reg_number": reg_number,
-        "name":       name,
-        "category":   category
+        "reg_number":      reg_number,
+        "name":            name,
+        "category":        category,
+        "registered_date": date.today().isoformat(),
+        "last_date":       last_date_str if category != "staff" else None
     }).execute()
 
     pending_image = None
     return jsonify({"status": "REGISTERED", "name": name}), 200
 
+@app.route("/renew", methods=["POST"])
+def renew():
+    data       = request.get_json()
+    reg_number = data.get("reg_number")
+    new_date   = data.get("new_date")
+
+    if not all([reg_number, new_date]):
+        return jsonify({"error": "Missing fields"}), 400
+
+    supabase.table("members").update({
+        "last_date": new_date
+    }).eq("reg_number", reg_number).execute()
+
+    return jsonify({"status": "RENEWED", "reg_number": reg_number, "new_date": new_date}), 200
+
+@app.route("/remove_member", methods=["POST"])
+def remove_member():
+    data       = request.get_json()
+    reg_number = data.get("reg_number")
+
+    if not reg_number:
+        return jsonify({"error": "Missing reg_number"}), 400
+
+    # Delete entry logs first (foreign key)
+    supabase.table("entry_log").delete().eq("reg_number", reg_number).execute()
+
+    # Delete member
+    supabase.table("members").delete().eq("reg_number", reg_number).execute()
+
+    # Delete face files
+    for ext in [".jpg", ".npy"]:
+        path = os.path.join(KNOWN_FACES_DIR, f"{reg_number}{ext}")
+        if os.path.exists(path):
+            os.remove(path)
+
+    return jsonify({"status": "REMOVED"}), 200
+
 @app.route("/recognize", methods=["POST"])
 def recognize():
     global last_result
-    raw_bytes     = request.data
-    unknown_image = decode_image(raw_bytes)
-    unknown_encs  = face_recognition.face_encodings(unknown_image)
+    raw_bytes = request.data
 
-    if not unknown_encs:
+    unknown_embedding = get_embedding(raw_bytes)
+    if unknown_embedding is None:
         last_result = {"status": "UNKNOWN", "message": "No face detected"}
         return jsonify(last_result), 200
 
-    known_encodings, known_ids = load_all_known_faces()
-    if not known_encodings:
+    members = supabase.table("members").select("*").execute().data
+    if not members:
         last_result = {"status": "UNKNOWN", "message": "No registered members"}
         return jsonify(last_result), 200
 
-    distances = face_recognition.face_distance(known_encodings, unknown_encs[0])
-    best_idx  = int(np.argmin(distances))
+    best_match = None
+    best_score = -1
 
-    if distances[best_idx] > 0.5:
+    for member in members:
+        emb_path = os.path.join(KNOWN_FACES_DIR, f"{member['reg_number']}.npy")
+        if not os.path.exists(emb_path):
+            continue
+        known_embedding = np.load(emb_path)
+        score = cosine_similarity(unknown_embedding, known_embedding)
+        if score > best_score:
+            best_score = score
+            best_match = member
+
+    print(f"Best score: {best_score} for {best_match}")
+
+    if best_match is None or best_score < 0.3:
         last_result = {"status": "UNKNOWN", "message": "Face not recognised"}
         return jsonify(last_result), 200
 
-    reg_number = known_ids[best_idx]
-    member     = supabase.table("members").select("*").eq("reg_number", reg_number).execute().data[0]
-    name       = member["name"]
-    category   = member["category"]
+    reg_number = best_match["reg_number"]
+    name       = best_match["name"]
+    category   = best_match["category"]
+    last_date  = best_match.get("last_date")
     limit      = DAILY_LIMITS[category]
 
+    # Check expiry for non-staff
+    if category != "staff" and last_date:
+        if date.today().isoformat() > last_date:
+            last_result = {
+                "status":     "EXPIRED",
+                "name":       name,
+                "reg":        reg_number,
+                "message":    "Membership expired! Renewal required.",
+                "last_date":  last_date
+            }
+            return jsonify(last_result), 200
+
+    # Check daily limit
     if limit is not None:
         count = get_today_count(reg_number)
         if count >= limit:

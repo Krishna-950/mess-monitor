@@ -17,132 +17,80 @@
   header h1 { font-size: 1.5rem; color: #38bdf8; }
   header span { font-size: 0.85rem; color: #94a3b8; }
 
-  .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    padding: 30px;
-    max-width: 1100px;
-    margin: auto;
-  }
+  .container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 30px; max-width: 1200px; margin: auto; }
 
-  .card {
-    background: #1e293b;
-    border-radius: 14px;
-    padding: 24px;
-    border: 1px solid #334155;
-  }
-  .card h2 {
-    font-size: 1rem;
-    color: #38bdf8;
-    margin-bottom: 18px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
+  .card { background: #1e293b; border-radius: 14px; padding: 24px; border: 1px solid #334155; }
+  .card h2 { font-size: 1rem; color: #38bdf8; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.05em; }
 
   #status-box {
-    background: #0f172a;
-    border-radius: 10px;
-    padding: 20px;
-    min-height: 140px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border: 1px solid #334155;
-    margin-bottom: 14px;
+    background: #0f172a; border-radius: 10px; padding: 20px;
+    min-height: 140px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    border: 1px solid #334155; margin-bottom: 14px;
   }
-  #status-box .status-icon { font-size: 2.5rem; }
-  #status-box .status-name { font-size: 1.4rem; font-weight: 700; margin-top: 8px; }
-  #status-box .status-reg  { font-size: 0.9rem; color: #94a3b8; }
-  #status-box .status-msg  { font-size: 0.85rem; margin-top: 6px; }
+  .status-icon { font-size: 2.5rem; }
+  .status-name { font-size: 1.4rem; font-weight: 700; margin-top: 8px; }
+  .status-reg  { font-size: 0.9rem; color: #94a3b8; }
+  .status-msg  { font-size: 0.85rem; margin-top: 6px; }
 
   .match   { color: #4ade80; }
   .denied  { color: #f97316; }
   .unknown { color: #f87171; }
+  .expired { color: #facc15; }
 
-  label {
-    font-size: 0.8rem;
-    color: #94a3b8;
-    display: block;
-    margin-bottom: 5px;
-    margin-top: 14px;
-  }
+  label { font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 5px; margin-top: 14px; }
   input, select {
-    width: 100%;
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 1px solid #334155;
-    background: #0f172a;
-    color: #e2e8f0;
-    font-size: 0.95rem;
+    width: 100%; padding: 10px 14px; border-radius: 8px;
+    border: 1px solid #334155; background: #0f172a; color: #e2e8f0; font-size: 0.95rem;
   }
-  input:focus, select:focus {
-    outline: none;
-    border-color: #38bdf8;
-  }
+  input:focus, select:focus { outline: none; border-color: #38bdf8; }
 
-  .btn {
-    display: inline-block;
-    margin-top: 18px;
-    padding: 11px 24px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 600;
-    width: 100%;
-    transition: opacity 0.2s;
-  }
+  .btn { display: inline-block; margin-top: 18px; padding: 11px 24px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.95rem; font-weight: 600; width: 100%; transition: opacity 0.2s; }
   .btn:hover { opacity: 0.85; }
-  .btn-blue  { background: #0284c7; color: #fff; }
-  .btn-green { background: #16a34a; color: #fff; }
+  .btn-blue   { background: #0284c7; color: #fff; }
+  .btn-green  { background: #16a34a; color: #fff; }
+  .btn-yellow { background: #ca8a04; color: #fff; }
+  .btn-red    { background: #dc2626; color: #fff; }
 
-  #reg-status {
-    margin-top: 12px;
-    font-size: 0.85rem;
-    text-align: center;
-    min-height: 20px;
-  }
+  #reg-status { margin-top: 12px; font-size: 0.85rem; text-align: center; min-height: 20px; }
 
   .full-width { grid-column: 1 / -1; }
 
-  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-  th {
-    text-align: left;
-    padding: 10px 14px;
-    color: #94a3b8;
-    border-bottom: 1px solid #334155;
-  }
-  td {
-    padding: 10px 14px;
-    border-bottom: 1px solid #1e293b;
-  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { text-align: left; padding: 10px 14px; color: #94a3b8; border-bottom: 1px solid #334155; }
+  td { padding: 10px 14px; border-bottom: 1px solid #1e293b; vertical-align: middle; }
   tr:hover td { background: #0f172a; }
 
-  .badge {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
   .badge-staff   { background: #1e40af; color: #bfdbfe; }
   .badge-hostel  { background: #065f46; color: #a7f3d0; }
   .badge-scholar { background: #7c2d12; color: #fed7aa; }
 
+  .expired-row td { background: #1c1006 !important; }
+  .expired-tag { color: #facc15; font-size: 0.75rem; font-weight: 600; }
+
   #pending-indicator {
-    display: none;
-    background: #854d0e;
-    color: #fef08a;
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    margin-bottom: 14px;
-    text-align: center;
+    display: none; background: #854d0e; color: #fef08a;
+    padding: 10px 16px; border-radius: 8px; font-size: 0.85rem;
+    margin-bottom: 14px; text-align: center;
   }
   #pending-indicator.show { display: block; }
+
+  #last-date-row { display: block; }
+
+  /* Renewal Modal */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7); z-index: 100;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #1e293b; border-radius: 14px; padding: 30px;
+    border: 1px solid #334155; width: 380px; text-align: center;
+  }
+  .modal h3 { color: #facc15; margin-bottom: 8px; font-size: 1.1rem; }
+  .modal p  { color: #94a3b8; font-size: 0.85rem; margin-bottom: 16px; }
 </style>
 </head>
 <body>
@@ -156,7 +104,7 @@
 
 <div class="container">
 
-  <!-- Recognition Status Card -->
+  <!-- Recognition Status -->
   <div class="card">
     <h2>🔍 Recognition Status</h2>
     <div id="status-box">
@@ -167,7 +115,7 @@
     <button class="btn btn-blue" onclick="checkStatus()">🔄 Refresh Status</button>
   </div>
 
-  <!-- Registration Card -->
+  <!-- Registration -->
   <div class="card">
     <h2>📋 Register Member</h2>
     <div id="pending-indicator">📸 Image captured! Fill details and submit.</div>
@@ -179,11 +127,16 @@
     <input type="text" id="reg-number" placeholder="e.g. HS2024001">
 
     <label>Category</label>
-    <select id="reg-category">
-      <option value="staff">Mess Staff (Unlimited)</option>
+    <select id="reg-category" onchange="toggleLastDate()">
+      <option value="staff">Mess Staff (Unlimited, No Expiry)</option>
       <option value="hostel">Hostel Member (3× per day)</option>
       <option value="day_scholar">Day Scholar (1× per day)</option>
     </select>
+
+    <div id="last-date-row">
+      <label>Last Date (Membership Expiry)</label>
+      <input type="date" id="reg-last-date">
+    </div>
 
     <button class="btn btn-green" onclick="submitRegistration()">✅ Register Member</button>
     <div id="reg-status"></div>
@@ -198,6 +151,10 @@
           <th>Name</th>
           <th>Reg. Number</th>
           <th>Category</th>
+          <th>Registered Date</th>
+          <th>Last Date</th>
+          <th>Status</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody id="members-tbody">
@@ -213,6 +170,25 @@
               {{ m.category | replace('_', ' ') | title }}
             </span>
           </td>
+          <td>{{ m.registered_date or '—' }}</td>
+          <td>{{ m.last_date or '—' }}</td>
+          <td>
+            {% if m.category == 'staff' %}
+              <span style="color:#4ade80">✅ Active</span>
+            {% elif m.last_date and m.last_date < today %}
+              <span class="expired-tag">⚠️ Expired</span>
+            {% else %}
+              <span style="color:#4ade80">✅ Active</span>
+            {% endif %}
+          </td>
+          <td style="display:flex; gap:8px;">
+            {% if m.category != 'staff' %}
+            <button class="btn btn-yellow" style="margin-top:0; padding:6px 12px; width:auto; font-size:0.8rem;"
+              onclick="openRenewModal('{{ m.reg_number }}', '{{ m.name }}')">🔄 Renew</button>
+            {% endif %}
+            <button class="btn btn-red" style="margin-top:0; padding:6px 12px; width:auto; font-size:0.8rem;"
+              onclick="removeMember('{{ m.reg_number }}', '{{ m.name }}')">🗑 Remove</button>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -221,59 +197,86 @@
 
 </div>
 
+<!-- Renewal Modal -->
+<div class="modal-overlay" id="renew-modal">
+  <div class="modal">
+    <h3>🔄 Renew Membership</h3>
+    <p id="renew-member-name">Member name</p>
+    <label style="text-align:left; display:block;">New Last Date</label>
+    <input type="date" id="renew-date" style="margin-top:8px;">
+    <button class="btn btn-yellow" onclick="submitRenewal()" style="margin-top:16px;">Confirm Renewal</button>
+    <button class="btn" onclick="closeRenewModal()" style="margin-top:8px; background:#334155;">Cancel</button>
+    <div id="renew-status" style="margin-top:10px; font-size:0.85rem;"></div>
+  </div>
+</div>
+
+<!-- Expired Modal (shown on recognition) -->
+<div class="modal-overlay" id="expired-modal">
+  <div class="modal">
+    <h3>⚠️ Membership Expired!</h3>
+    <p id="expired-member-info">Member info</p>
+    <label style="text-align:left; display:block;">Set New Last Date</label>
+    <input type="date" id="expired-renew-date" style="margin-top:8px;">
+    <button class="btn btn-yellow" onclick="submitExpiredRenewal()" style="margin-top:16px;">Renew & Allow Entry</button>
+    <button class="btn" onclick="closeExpiredModal()" style="margin-top:8px; background:#334155;">Dismiss</button>
+    <div id="expired-renew-status" style="margin-top:10px; font-size:0.85rem;"></div>
+  </div>
+</div>
+
 <script>
-  // Auto-check pending image every 3 seconds
+  let currentRenewReg  = null;
+  let expiredRenewReg  = null;
+
+  // Auto-refresh
   setInterval(checkPendingImage, 3000);
-  // Auto-refresh recognition status every 5 seconds
   setInterval(checkStatus, 5000);
+
+  function toggleLastDate() {
+    const cat = document.getElementById('reg-category').value;
+    document.getElementById('last-date-row').style.display = cat === 'staff' ? 'none' : 'block';
+  }
+  toggleLastDate();
 
   async function checkPendingImage() {
     try {
       const r = await fetch('/pending_status');
       const d = await r.json();
-      document.getElementById('pending-indicator')
-              .classList.toggle('show', d.pending);
+      document.getElementById('pending-indicator').classList.toggle('show', d.pending);
     } catch(e) {}
   }
 
   async function submitRegistration() {
-    const name     = document.getElementById('reg-name').value.trim();
-    const reg      = document.getElementById('reg-number').value.trim();
-    const category = document.getElementById('reg-category').value;
-    const statusEl = document.getElementById('reg-status');
+    const name      = document.getElementById('reg-name').value.trim();
+    const reg       = document.getElementById('reg-number').value.trim();
+    const category  = document.getElementById('reg-category').value;
+    const lastDate  = document.getElementById('reg-last-date').value;
+    const statusEl  = document.getElementById('reg-status');
 
-    if (!name || !reg) {
-      statusEl.style.color = '#f87171';
-      statusEl.textContent = '⚠️ Please fill in all fields.';
-      return;
-    }
+    if (!name || !reg) { statusEl.style.color='#f87171'; statusEl.textContent='⚠️ Please fill in all fields.'; return; }
+    if (category !== 'staff' && !lastDate) { statusEl.style.color='#f87171'; statusEl.textContent='⚠️ Please set a last date.'; return; }
 
-    statusEl.style.color = '#94a3b8';
-    statusEl.textContent = 'Registering...';
+    statusEl.style.color='#94a3b8'; statusEl.textContent='Registering...';
 
     try {
       const r = await fetch('/register_save', {
-        method:  'POST',
+        method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body:    JSON.stringify({ name, reg_number: reg, category })
+        body: JSON.stringify({ name, reg_number: reg, category, last_date: lastDate || null })
       });
       const d = await r.json();
-
       if (d.status === 'REGISTERED') {
-        statusEl.style.color = '#4ade80';
-        statusEl.textContent = `✅ ${d.name} registered successfully!`;
-        document.getElementById('reg-name').value   = '';
-        document.getElementById('reg-number').value = '';
+        statusEl.style.color='#4ade80';
+        statusEl.textContent=`✅ ${d.name} registered successfully!`;
+        document.getElementById('reg-name').value='';
+        document.getElementById('reg-number').value='';
+        document.getElementById('reg-last-date').value='';
         document.getElementById('pending-indicator').classList.remove('show');
         loadMembers();
       } else {
-        statusEl.style.color = '#f87171';
-        statusEl.textContent = '❌ ' + (d.error || 'Registration failed');
+        statusEl.style.color='#f87171';
+        statusEl.textContent='❌ ' + (d.error || 'Registration failed');
       }
-    } catch(e) {
-      statusEl.style.color = '#f87171';
-      statusEl.textContent = '❌ Server error. Try again.';
-    }
+    } catch(e) { statusEl.style.color='#f87171'; statusEl.textContent='❌ Server error. Try again.'; }
   }
 
   async function checkStatus() {
@@ -283,22 +286,25 @@
       const box = document.getElementById('status-box');
 
       if (d.status === 'MATCH') {
-        box.innerHTML = `
-          <div class="status-icon">✅</div>
+        box.innerHTML = `<div class="status-icon">✅</div>
           <div class="status-name match">${d.name}</div>
           <div class="status-reg">${d.reg} · ${d.category.replace('_',' ')}</div>
           <div class="status-msg match">Access Granted</div>`;
       } else if (d.status === 'DENIED') {
-        box.innerHTML = `
-          <div class="status-icon">🚫</div>
+        box.innerHTML = `<div class="status-icon">🚫</div>
           <div class="status-name denied">${d.name}</div>
           <div class="status-reg">${d.reg}</div>
           <div class="status-msg denied">Daily limit reached — Buzzer triggered</div>`;
       } else if (d.status === 'UNKNOWN') {
-        box.innerHTML = `
-          <div class="status-icon">❓</div>
+        box.innerHTML = `<div class="status-icon">❓</div>
           <div class="status-name unknown">Unknown Person</div>
           <div class="status-msg unknown">Face not recognised — Buzzer triggered</div>`;
+      } else if (d.status === 'EXPIRED') {
+        box.innerHTML = `<div class="status-icon">⚠️</div>
+          <div class="status-name expired">${d.name}</div>
+          <div class="status-reg">${d.reg}</div>
+          <div class="status-msg expired">Membership expired — Buzzer triggered</div>`;
+        openExpiredModal(d.reg, d.name, d.last_date);
       }
     } catch(e) {}
   }
@@ -307,19 +313,107 @@
     try {
       const r = await fetch('/members');
       const members = await r.json();
-      const tbody = document.getElementById('members-tbody');
-      const badgeMap = {
-        staff:       'badge-staff',
-        hostel:      'badge-hostel',
-        day_scholar: 'badge-scholar'
-      };
-      tbody.innerHTML = members.map(m => `
-        <tr>
+      const today = new Date().toISOString().split('T')[0];
+      const badgeMap = { staff:'badge-staff', hostel:'badge-hostel', day_scholar:'badge-scholar' };
+      document.getElementById('members-tbody').innerHTML = members.map(m => {
+        const expired = m.category !== 'staff' && m.last_date && m.last_date < today;
+        const statusHtml = m.category === 'staff'
+          ? '<span style="color:#4ade80">✅ Active</span>'
+          : expired
+            ? '<span class="expired-tag">⚠️ Expired</span>'
+            : '<span style="color:#4ade80">✅ Active</span>';
+        const renewBtn = m.category !== 'staff'
+          ? `<button class="btn btn-yellow" style="margin-top:0;padding:6px 12px;width:auto;font-size:0.8rem;"
+               onclick="openRenewModal('${m.reg_number}','${m.name}')">🔄 Renew</button>` : '';
+        return `<tr class="${expired ? 'expired-row' : ''}">
           <td>${m.name}</td>
           <td>${m.reg_number}</td>
           <td><span class="badge ${badgeMap[m.category]}">${m.category.replace('_',' ')}</span></td>
-        </tr>`).join('');
+          <td>${m.registered_date || '—'}</td>
+          <td>${m.last_date || '—'}</td>
+          <td>${statusHtml}</td>
+          <td style="display:flex;gap:8px;">
+            ${renewBtn}
+            <button class="btn btn-red" style="margin-top:0;padding:6px 12px;width:auto;font-size:0.8rem;"
+              onclick="removeMember('${m.reg_number}','${m.name}')">🗑 Remove</button>
+          </td>
+        </tr>`;
+      }).join('');
     } catch(e) {}
+  }
+
+  function openRenewModal(reg, name) {
+    currentRenewReg = reg;
+    document.getElementById('renew-member-name').textContent = `Renewing: ${name} (${reg})`;
+    document.getElementById('renew-date').value = '';
+    document.getElementById('renew-status').textContent = '';
+    document.getElementById('renew-modal').classList.add('show');
+  }
+  function closeRenewModal() {
+    document.getElementById('renew-modal').classList.remove('show');
+    currentRenewReg = null;
+  }
+
+  async function submitRenewal() {
+    const newDate  = document.getElementById('renew-date').value;
+    const statusEl = document.getElementById('renew-status');
+    if (!newDate) { statusEl.style.color='#f87171'; statusEl.textContent='⚠️ Please select a date.'; return; }
+
+    const r = await fetch('/renew', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ reg_number: currentRenewReg, new_date: newDate })
+    });
+    const d = await r.json();
+    if (d.status === 'RENEWED') {
+      statusEl.style.color='#4ade80';
+      statusEl.textContent=`✅ Renewed until ${newDate}`;
+      loadMembers();
+      setTimeout(closeRenewModal, 1500);
+    }
+  }
+
+  function openExpiredModal(reg, name, lastDate) {
+    expiredRenewReg = reg;
+    document.getElementById('expired-member-info').textContent =
+      `${name} (${reg}) — expired on ${lastDate}`;
+    document.getElementById('expired-renew-date').value = '';
+    document.getElementById('expired-renew-status').textContent = '';
+    document.getElementById('expired-modal').classList.add('show');
+  }
+  function closeExpiredModal() {
+    document.getElementById('expired-modal').classList.remove('show');
+    expiredRenewReg = null;
+  }
+
+  async function submitExpiredRenewal() {
+    const newDate  = document.getElementById('expired-renew-date').value;
+    const statusEl = document.getElementById('expired-renew-status');
+    if (!newDate) { statusEl.style.color='#f87171'; statusEl.textContent='⚠️ Please select a date.'; return; }
+
+    const r = await fetch('/renew', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ reg_number: expiredRenewReg, new_date: newDate })
+    });
+    const d = await r.json();
+    if (d.status === 'RENEWED') {
+      statusEl.style.color='#4ade80';
+      statusEl.textContent=`✅ Renewed until ${newDate}`;
+      loadMembers();
+      setTimeout(closeExpiredModal, 1500);
+    }
+  }
+
+  async function removeMember(reg, name) {
+    if (!confirm(`Are you sure you want to remove ${name}?`)) return;
+    const r = await fetch('/remove_member', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ reg_number: reg })
+    });
+    const d = await r.json();
+    if (d.status === 'REMOVED') loadMembers();
   }
 </script>
 </body>

@@ -3,6 +3,6 @@ numpy
 Pillow
 supabase
 python-dotenv
-cmake
-dlib
-face_recognition
+insightface
+onnxruntime
+opencv-python-headless
