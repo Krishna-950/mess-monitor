@@ -1,0 +1,6 @@
+.env
+venv/
+known_faces/
+__pycache__/
+*.pyc
+SQL.txt
