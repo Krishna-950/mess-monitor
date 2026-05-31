@@ -62,7 +62,7 @@ def log_entry(reg_number):
 @app.route("/")
 def index():
     members = supabase.table("members").select("*").execute().data
-    return render_template("index.html", members=members)
+    return render_template("index.html", members=members, today=date.today().isoformat())
 
 @app.route("/register_capture", methods=["POST"])
 def register_capture():
@@ -235,4 +235,4 @@ def pending_status():
     return jsonify({"pending": pending_image is not None})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=7860, debug=False)
