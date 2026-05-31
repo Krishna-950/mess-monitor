@@ -1,0 +1,6 @@
+flask
+face_recognition
+numpy
+Pillow
+supabase
+python-dotenv
