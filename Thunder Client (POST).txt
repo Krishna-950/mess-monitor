@@ -1,0 +1,6 @@
+Thunder Client (POST)
+
+Register
+http://localhost:5000/register_capture
+Recognition 
+http://localhost:5000/recognize

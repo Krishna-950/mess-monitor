@@ -1,0 +1,36 @@
+Good evening
+
+I want to make an IOT Project by using ESP32 CAM MB Module and i made all the required physical connections and obtained a live web stream.
+
+The components are - ESP32 CAM MB Module, two push buttons, one buzzer, one Green LED and one buzzer. The streaming to a website is through wi-fi access.
+
+The project is about an entrance monitoring system at a hostel mess which allows the registered candidates in three categories;
+
+
+
+
+
+The mess staff - Allows them always.
+
+
+
+The hostel members - Allows only 3 times a day
+
+
+
+The day scholars - Allows only once a day
+
+
+
+These members faces should be registered in the website by a manual triggering from one push button and the recognisation should be done by another push button. 
+
+If the face is matched with the registered face then their name and registered number should be displayed. The website have to take ask for this data during the registration push button is triggered and it have to be saved. 
+
+When an unregistered face is given by the recignisation push button then the buzzer have to give a beep for 3 seconds.
+
+Please give me an Arduino IDE code for this project and also design a website for the following image recognisation process.
+
+Also give me a step by step process to make this project 
+
+I hope you understood everything very well
+
